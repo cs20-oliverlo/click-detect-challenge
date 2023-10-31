@@ -12,12 +12,13 @@ let rectangles;
 let mouseIsPressed = false;
 let mouseX;
 let mouseY;
-let gameState = "play";
+let gameState;
 
 reset();
 
 // Event Stuff
 document.addEventListener("mousemove", mousemoveHandler);
+document.addEventListener("mousedown", mousedownHandler);
 document.addEventListener("mouseup", mouseupHandler);
 
 function mousemoveHandler(e) {
@@ -29,42 +30,51 @@ function mousemoveHandler(e) {
   mouseY = Math.round(e.clientY - cnvRect.top);
 }
 
-function mousedownHandler(event) {
+function mousedownHandler() {
     mouseIsPressed = true;
 }
 
-function mouseupHandler(event) {
+function mouseupHandler() {
     mouseIsPressed = false;
 }
+
+
 
 // Animation
 requestAnimationFrame(animate);
 function animate() {
+    // Fill Background
     ctx.fillStyle = `rgb(50, 50, 50)`;
     ctx.fillRect(0, 0, cnv.width, cnv. height);
     
+    // Rectangle Helper Functions
     for (let i = 0; i < rectangles.length; i++) {
         drawRectangles(i);
         shapeMovement(rectangles, i);
+
         if (mouseIsPressed === true) {
             shapeClicked(rectangles, i)
+            console.log("mouseIsPressed is true");
         }
     }
 
+    // Circle Helper Functions
     for (let i = 0; i < circles.length; i++) {
         drawCircle(i);
         shapeMovement(circles, i);
+        
         if (mouseIsPressed === true) {
             shapeClicked(circles, i)
         }
     }
-
-    if (gameState === "gameOver") {
-        if (circles.length === 0) {
-            alert("Awesome");
-        } else {
-            alert("try again");
-        }
+    
+    // Win/Lose
+    if (circles.length === 0) {
+        alert("Awesome");
+        reset();
+    } else if (gameState === "gameOver") {
+        alert("try again");
+        reset();
     }
 
     // Request Animation Frame
@@ -90,12 +100,12 @@ function shapeMovement(shape, n) {
     shape[n].y += shape[n].yVelocity;
 
     if (shape === rectangles) {
-        if (shape[n].x > cnv.width + 5) {
+        if (shape[n].x > cnv.width + shape[n].w) {
             shape[n].x = -shape[n].w;
         } else if (shape[n].x + shape[n].w < -5) {
             shape[n].x = cnv.width;
         }
-        if (shape[n].y > cnv.height + 5) {
+        if (shape[n].y > cnv.height + shape[n].h) {
             shape[n].y = -shape[n].h;
         } else if (shape[n].y + shape[n].w < -5) {
             shape[n].y = cnv.height;
@@ -114,13 +124,15 @@ function shapeMovement(shape, n) {
 
 function shapeClicked(shape, n) {
     if (shape === rectangles) {
-        if (mouseX > shape[n].x && mouseX < shape[n].x + shape[n].w && mouseY > rectangles[n].y && mouseY < rectangles[n].y + rectangles[n].h) {
+        if (mouseX > shape[n].x && mouseX < shape[n].x + shape[n].w && mouseY > shape[n].y && mouseY < shape[n].y + shape[n].h) {
             gameState = "gameOver";
+
         }
-    } else if (shape === circles) {
-        if (Math.sqrt(Math.pow((mouseX - shape[n].x), 2) + Math.pow((mouseY - shape[n].y), 2)) <= shape[n].r) {
-            shape.splice(n, 1);
-            console.log(true);
+    }
+
+    if (shape === circles) {
+        if (Math.sqrt(Math.pow((mouseX - circles[n].x), 2) + Math.pow((mouseY - circles[n].y), 2)) <= circles[n].r) {
+            circles.splice(n, 1);
           }
     }
 }
@@ -153,6 +165,8 @@ function newRectangle(x1, y1, w1, h1, lineWidth1, xVelocity1, yVelocity1, color1
 }
 
 function reset() {
+    gameState = "play";
+
     rectangles = [];
     for (let i = 0; i < 10; i++) {
         rectangles.push(newRectangle(randomInt(0, cnv.width), randomInt(0, cnv.height), randomInt(25, 50), randomInt(25, 50), 3, randomInt(-5, 5), randomInt(-5, 5), "red"));
