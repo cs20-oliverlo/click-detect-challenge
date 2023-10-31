@@ -146,7 +146,7 @@ function newCircle(x1, y1, r1, lineWidth1, startAngle1, endAngle1, xVelocity1, y
             endAngle: endAngle1,
             xVelocity: xVelocity1,
             yVelocity: yVelocity1,
-            color: color1,
+            color: color1
         };
 }
 
@@ -159,7 +159,7 @@ function newRectangle(x1, y1, w1, h1, lineWidth1, xVelocity1, yVelocity1, color1
             lineWidth: lineWidth1,
             xVelocity: xVelocity1,
             yVelocity: yVelocity1,
-            color: color1,
+            color: color1
         }
 }
 
