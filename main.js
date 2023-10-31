@@ -54,7 +54,6 @@ function animate() {
 
         if (mouseIsPressed === true) {
             shapeClicked(rectangles, i)
-            console.log("mouseIsPressed is true");
         }
     }
 
