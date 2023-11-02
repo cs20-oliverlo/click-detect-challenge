@@ -51,20 +51,17 @@ function animate() {
     for (let i = 0; i < rectangles.length; i++) {
         drawRectangles(i);
         shapeMovement(rectangles, i);
-
-        if (mouseIsPressed === true) {
-            shapeClicked(rectangles, i)
-        }
     }
 
     // Circle Helper Functions
     for (let i = 0; i < circles.length; i++) {
         drawCircle(i);
         shapeMovement(circles, i);
-        
-        if (mouseIsPressed === true) {
-            shapeClicked(circles, i)
-        }
+    }
+
+    // Click Detection
+    if (mouseIsPressed === true) {
+        shapeClicked();
     }
     
     // Win/Lose
@@ -95,6 +92,13 @@ function drawCircle(n) {
 }
 
 function shapeMovement(shape, n) {
+    if (shape[n].xVelocity === 0) {
+        shape[n].xVelocity = randomInt(-5, 5);
+    }
+    if (shape[n].yVelocity === 0) {
+        shape[n].yVelocity = randomInt(-5, 5);
+    }
+
     shape[n].x += shape[n].xVelocity;
     shape[n].y += shape[n].yVelocity;
 
@@ -121,18 +125,18 @@ function shapeMovement(shape, n) {
     }
 }
 
-function shapeClicked(shape, n) {
-    if (shape === rectangles) {
-        if (mouseX > shape[n].x && mouseX < shape[n].x + shape[n].w && mouseY > shape[n].y && mouseY < shape[n].y + shape[n].h) {
+function shapeClicked() {
+    for (let i = 0; i < rectangles.length; i++) {
+        if (mouseX > rectangles[i].x && mouseX < rectangles[i].x + rectangles[i].w && mouseY > rectangles[i].y && mouseY < rectangles[i].y + rectangles[i].h) {
             gameState = "gameOver";
-
+    
         }
     }
-
-    if (shape === circles) {
-        if (Math.sqrt(Math.pow((mouseX - circles[n].x), 2) + Math.pow((mouseY - circles[n].y), 2)) <= circles[n].r) {
-            circles.splice(n, 1);
-          }
+    
+    for (let i = 0; i < circles.length; i++) {
+        if (Math.sqrt(Math.pow((mouseX - circles[i].x), 2) + Math.pow((mouseY - circles[i].y), 2)) <= circles[i].r) {
+            circles.splice(i, 1);
+        }
     }
 }
 
