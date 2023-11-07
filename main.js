@@ -4,19 +4,18 @@ let ctx = cnv.getContext("2d");
 cnv.width = 800;
 cnv.height = 550;
 
-// EVENT STUFF
-
 // Reset Variables
 let circles;
 let rectangles;
-let mouseIsPressed = false;
-let mouseX;
-let mouseY;
 let gameState;
 
 reset();
 
 // Event Stuff
+let mouseIsPressed = false;
+let mouseX;
+let mouseY;
+
 document.addEventListener("mousemove", mousemoveHandler);
 document.addEventListener("mousedown", mousedownHandler);
 document.addEventListener("mouseup", mouseupHandler);
