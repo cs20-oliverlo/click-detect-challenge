@@ -4,13 +4,6 @@ let ctx = cnv.getContext("2d");
 cnv.width = 800;
 cnv.height = 550;
 
-// Reset Variables
-let circles;
-let rectangles;
-let gameState;
-
-reset();
-
 // Event Stuff
 let mouseIsPressed = false;
 let mouseX;
@@ -37,7 +30,12 @@ function mouseupHandler() {
     mouseIsPressed = false;
 }
 
+// Reset Variables
+let circles;
+let rectangles;
+let gameState;
 
+reset();
 
 // Animation
 requestAnimationFrame(animate);
@@ -48,13 +46,13 @@ function animate() {
     
     // Rectangle Helper Functions
     for (let i = 0; i < rectangles.length; i++) {
-        drawRectangles(i);
+        draw(rectangles, i);
         shapeMovement(rectangles, i);
     }
 
     // Circle Helper Functions
     for (let i = 0; i < circles.length; i++) {
-        drawCircle(i);
+        draw(circles, i);
         shapeMovement(circles, i);
     }
 
@@ -76,18 +74,18 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-function drawRectangles(n) {
-    ctx.strokeStyle = rectangles[n].color;
-    ctx.lineWidth = rectangles[n].lineWidth;
-    ctx.strokeRect(rectangles[n].x, rectangles[n].y, rectangles[n].w, rectangles[n].h);
-}
-
-function drawCircle(n) {
-    ctx.strokeStyle = circles[n].color;
-    ctx.lineWidth = circles[n].lineWidth;
-    ctx.beginPath();
-    ctx.arc(circles[n].x, circles[n].y, circles[n].r, circles[n].startAngle, circles[n].endAngle * Math.PI);
-    ctx.stroke();
+function draw(shape, n) {
+    if (shape === rectangles) {
+        ctx.strokeStyle = rectangles[n].color;
+        ctx.lineWidth = rectangles[n].lineWidth;
+        ctx.strokeRect(rectangles[n].x, rectangles[n].y, rectangles[n].w, rectangles[n].h);
+    } else {
+        ctx.strokeStyle = circles[n].color;
+        ctx.lineWidth = circles[n].lineWidth;
+        ctx.beginPath();
+        ctx.arc(circles[n].x, circles[n].y, circles[n].r, circles[n].startAngle, circles[n].endAngle * Math.PI);
+        ctx.stroke();
+    }
 }
 
 function shapeMovement(shape, n) {
